@@ -16,4 +16,6 @@ const forbidden = message => (req, res, next) => {
   res.status(403).send(message)
 }
 
+// EI: suggested that students add a filter for keeping out all non-admins
+
 module.exports = {mustBeLoggedIn, selfOnly, forbidden,}

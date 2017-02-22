@@ -1,11 +1,11 @@
-'use strict'
+/'use strict'
 
 const express = require('express')
 const bodyParser = require('body-parser')
 const {resolve} = require('path')
 const passport = require('passport')
 const PrettyError = require('pretty-error')
-
+// EI: https://www.npmjs.com/package/pretty-error
 
 // Bones has a symlink from node_modules/APP to the root of the app.
 // That means that we can require paths relative to the app root by
@@ -44,7 +44,7 @@ module.exports = app
   // Authentication middleware
   .use(passport.initialize())
   .use(passport.session())
-  
+
   // Serve static files from ../public
   .use(express.static(resolve(__dirname, '..', 'public')))
 
@@ -60,14 +60,15 @@ module.exports = app
     next()
   })
 
+// EI: https://nodejs.org/docs/latest/api/all.html#modules_accessing_the_main_module
 if (module === require.main) {
   // Start listening only if we're the main module.
-  // 
+  //
   // https://nodejs.org/api/modules.html#modules_accessing_the_main_module
   const server = app.listen(
     process.env.PORT || 1337,
     () => {
-      console.log(`--- Started HTTP Server for ${pkg.name} ---`)      
+      console.log(`--- Started HTTP Server for ${pkg.name} ---`)
       console.log(`Listening on ${JSON.stringify(server.address())}`)
     }
   )

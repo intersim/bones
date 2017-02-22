@@ -13,7 +13,7 @@ console.log(chalk.yellow(`Opening database connection to ${url}`));
 
 // create the database instance
 const db = module.exports = new Sequelize(url, {
-  logging: debug, // export DEBUG=sql in the environment to get SQL queries 
+  logging: debug, // export DEBUG=sql in the environment to get SQL queries
   define: {
     underscored: true,       // use snake_case rather than camelCase column names
     freezeTableName: true,   // don't change table names from the one specified
@@ -21,6 +21,7 @@ const db = module.exports = new Sequelize(url, {
   }
 })
 
+// EI: circular dependecy??
 // pull in our models
 require('./models')
 
@@ -30,7 +31,7 @@ function sync(force=app.isTesting, retries=0, maxRetries=5) {
     .then(ok => console.log(`Synced models to db ${url}`))
     .catch(fail => {
       // Don't do this auto-create nonsense in prod, or
-      // if we've retried too many times. 
+      // if we've retried too many times.
       if (app.isProduction || retries > maxRetries) {
         console.error(chalk.red(`********** database error ***********`))
         console.error(chalk.red(`    Couldn't connect to ${url}`))
@@ -47,4 +48,5 @@ function sync(force=app.isTesting, retries=0, maxRetries=5) {
     })
 }
 
+// EI: this method will try to create the appropriate db for the environment (automatically creates based on environment and/or app name); server/start.js requires in server/api.js, which requires in this file, causing your app to sync with right db when the server starts
 db.didSync = sync()
