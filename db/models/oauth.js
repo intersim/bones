@@ -16,13 +16,19 @@ const OAuth = db.define('oauths', {
   // OAuth v1 fields
   token: Sequelize.STRING,
   tokenSecret: Sequelize.STRING,
-  
+
   // The whole profile as JSON
   profileJson: Sequelize.JSON,
 }, {
+  /*
+    EI:
+    Sequelize and indexes: http://docs.sequelizejs.com/en/2.0/docs/models-definition/#indexes
+    Postgres documentation: https://www.postgresql.org/docs/9.1/static/indexes.html
+  */
 	indexes: [{fields: ['uid'], unique: true,}],
 })
 
+// EI: this method is used below in the OAuth.setupStrategy method; it's our callback function that will execute when the user has successfully logged in
 OAuth.V2 = (accessToken, refreshToken, profile, done) =>
   OAuth.findOrCreate({
     where: {
@@ -36,6 +42,7 @@ OAuth.V2 = (accessToken, refreshToken, profile, done) =>
         profile.uid)
       oauth.profileJson = profile
       oauth.accessToken = accessToken
+      // EI: this is a Bluebird method, basically like "all" but for an object whose properties are all promises: http://bluebirdjs.com/docs/api/promise.props.html
       return db.Promise.props({
         oauth,
         user: oauth.getUser(),
@@ -53,15 +60,18 @@ OAuth.V2 = (accessToken, refreshToken, profile, done) =>
     .then(({ user }) => done(null, user))
     .catch(done)
 
-
+// EI: wrapper around `passport.use`
 OAuth.setupStrategy =
 ({
   provider,
   strategy,
   config,
   oauth=OAuth.V2,
-  passport 
+  passport
 }) => {
+  /*
+    EI: some error-handling to make sure we're passing all of the info that our provider needs - Google is expecting properties with a certain name, Github may be expecting properties with a slightly different name, etc. (see the auth routes for more info)
+  */
   const undefinedKeys = Object.keys(config)
         .map(k => config[k])
         .filter(value => typeof value === 'undefined')
@@ -73,6 +83,7 @@ OAuth.setupStrategy =
   }
 
   debug('initializing provider:%s', provider)
+  // EI: `oauth` is the callback function that will execute when the user has successfully logged in
   passport.use(new strategy(config, oauth))
 }
 

@@ -9,26 +9,26 @@ const auth = require('express').Router()
 
 /*************************
  * Auth strategies
- * 
+ *
  * The OAuth model knows how to configure Passport middleware.
  * To enable an auth strategy, ensure that the appropriate
  * environment variables are set.
- * 
+ *
  * You can do it on the command line:
- * 
+ *
  *   FACEBOOK_CLIENT_ID=abcd FACEBOOK_CLIENT_SECRET=1234 npm start
- * 
+ *
  * Or, better, you can create a ~/.$your_app_name.env.json file in
  * your home directory, and set them in there:
- * 
+ *
  * {
  *   FACEBOOK_CLIENT_ID: 'abcd',
  *   FACEBOOK_CLIENT_SECRET: '1234',
  * }
- * 
+ *
  * Concentrating your secrets this way will make it less likely that you
  * accidentally push them to Github, for example.
- * 
+ *
  * When you deploy to production, you'll need to set up these environment
  * variables with your hosting provider.
  **/
@@ -73,7 +73,10 @@ OAuth.setupStrategy({
 })
 
 // Other passport configuration:
-
+/*
+  EI: passport review in the Week 6 Concept Review:
+  https://docs.google.com/document/d/1MHS7DzzXKZvR6MkL8VWdCxohFJHGgdms71XNLIET52Q/edit?usp=sharing
+*/
 passport.serializeUser((user, done) => {
   done(null, user.id)
 })
@@ -117,6 +120,14 @@ passport.use(new (require('passport-local').Strategy) (
 ))
 
 auth.get('/whoami', (req, res) => res.send(req.user))
+
+
+/*
+  EI:
+    1. set up your app with the provider (register callback URL, get ID/secret)
+    2. add an auth.get('/login/:strategy', ... ) route
+    3. set up your front end to make POST requests to '/login/:strategy'
+*/
 
 auth.post('/login/:strategy', (req, res, next) =>
   passport.authenticate(req.params.strategy, {

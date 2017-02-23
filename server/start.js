@@ -36,6 +36,11 @@ module.exports = app
     name: 'session',
     keys: [process.env.SESSION_SECRET || 'an insecure secret key'],
   }))
+  /*
+    EI:
+    https://www.npmjs.com/package/cookie-session,
+    http://stackoverflow.com/questions/23566555/whats-difference-with-express-session-and-cookie-session
+  */
 
   // Body parsing middleware
   .use(bodyParser.urlencoded({ extended: true }))
