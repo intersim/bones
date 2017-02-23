@@ -121,14 +121,6 @@ passport.use(new (require('passport-local').Strategy) (
 
 auth.get('/whoami', (req, res) => res.send(req.user))
 
-
-/*
-  EI:
-    1. set up your app with the provider (register callback URL, get ID/secret)
-    2. add an auth.get('/login/:strategy', ... ) route
-    3. set up your front end to make POST requests to '/login/:strategy'
-*/
-
 auth.post('/login/:strategy', (req, res, next) =>
   passport.authenticate(req.params.strategy, {
     successRedirect: '/'

@@ -69,9 +69,6 @@ OAuth.setupStrategy =
   oauth=OAuth.V2,
   passport
 }) => {
-  /*
-    EI: some error-handling to make sure we're passing all of the info that our provider needs - Google is expecting properties with a certain name, Github may be expecting properties with a slightly different name, etc. (see the auth routes for more info)
-  */
   const undefinedKeys = Object.keys(config)
         .map(k => config[k])
         .filter(value => typeof value === 'undefined')
