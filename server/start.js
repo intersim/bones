@@ -65,7 +65,10 @@ module.exports = app
     next()
   })
 
-// EI: https://nodejs.org/docs/latest/api/all.html#modules_accessing_the_main_module
+/*
+EI: https://nodejs.org/docs/latest/api/all.html#modules_accessing_the_main_module
+Joe's comments from training: this is only starting the server if this file is being run directly by Node, and not required by another file (which is something that Bones does for testing reasons)
+*/
 if (module === require.main) {
   // Start listening only if we're the main module.
   //
