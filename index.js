@@ -20,7 +20,7 @@ Please change it in ${__dirname}/package.json
 ********************************************************************`
 
 const reasonableName = /^[a-z0-9\-_]+$/
-// EI: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test
+// RegExp.text docs: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test
 if (!reasonableName.test(pkg.name)) {
   console.error(chalk.red(nameError))
 }
@@ -31,7 +31,7 @@ if (!reasonableName.test(pkg.name)) {
 //   or ~/.your_app_name.env.json
 //
 // and add it to the environment.
-// EI: note that this needs to be in your home directory, not project root directory
+// Note that this needs to be in your home directory, not the project's root directory
 const env = Object.create(process.env)
   , secretsFile = resolve(env.HOME, `.${pkg.name}.env`)
 try {

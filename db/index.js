@@ -42,18 +42,11 @@ function sync(force=app.isTesting, retries=0, maxRetries=5) {
       // Otherwise, do this autocreate nonsense
       console.log(`${retries ? `[retry ${retries}]` : ''} Creating database ${name}...`)
       return new Promise((resolve, reject) =>
-        /*
-          EI: https://nodejs.org/api/child_process.html#child_process_child_process_exec_command_options_callback
-        */
+        // 'child_process.exec' docs: https://nodejs.org/api/child_process.html#child_process_child_process_exec_command_options_callback
         require('child_process').exec(`createdb "${name}"`, resolve)
       ).then(() => sync(true, retries + 1))
     })
 }
 
-/*
-  EI: this method will try to create the appropriate db for the
-  environment (based on environment and/or app name); server/start.js
-  requires in server/api.js, which requires in this file, causing your
-  app to sync with right db when the server starts
-*/
+// Note that db.didSync is a promise, rather than returning a promise
 db.didSync = sync()

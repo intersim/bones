@@ -1,11 +1,11 @@
-/'use strict'
+'use strict'
 
 const express = require('express')
 const bodyParser = require('body-parser')
 const {resolve} = require('path')
 const passport = require('passport')
 const PrettyError = require('pretty-error')
-/* EI: https://www.npmjs.com/package/pretty-error */
+// PrettyError docs: https://www.npmjs.com/package/pretty-error
 
 // Bones has a symlink from node_modules/APP to the root of the app.
 // That means that we can require paths relative to the app root by
@@ -31,16 +31,14 @@ prettyError.skipNodeFiles()
 prettyError.skipPackage('express')
 
 module.exports = app
-  // We'll store the whole session in a cookie
+  /*
+    Cookie-session docs: https://www.npmjs.com/package/cookie-session
+    Compared to express-session (which is what's used in the Auther workshop), cookie-session stores sessions in a cookie, rather than some other type of session store.
+  */
   .use(require('cookie-session') ({
     name: 'session',
     keys: [process.env.SESSION_SECRET || 'an insecure secret key'],
   }))
-  /*
-    EI:
-    1. https://www.npmjs.com/package/cookie-session,
-    2. http://stackoverflow.com/questions/23566555/whats-difference-with-express-session-and-cookie-session
-  */
 
   // Body parsing middleware
   .use(bodyParser.urlencoded({ extended: true }))
@@ -53,7 +51,7 @@ module.exports = app
   // Serve static files from ../public
   .use(express.static(resolve(__dirname, '..', 'public')))
 
-  // Serve our api
+  // Serve our api - ./api also requires in ../db, which syncs with our database
   .use('/api', require('./api'))
 
   // Send index.html for anything else.
@@ -66,7 +64,9 @@ module.exports = app
   })
 
 /*
-  EI: Joe's comments from training: this check on line 71 is only starting the server if this file is being run directly by Node, and not required by another file (Bones does this for testing reasons; if we're running our app in development or production, we've run it directly from Node using npm start - if we're testing, then we don't actually want to start the server; module === require.main will luckily be false in that case, because we would be requiring in this file in our tests rather than running it directly)
+  This check on line 71 is only starting the server if this file is being run directly by Node, and not required by another file.
+
+  Bones does this for testing reasons. If we're running our app in development or production, we've run it directly from Node using 'npm start'; if we're testing, then we don't actually want to start the server; 'module === require.main' will luckily be false in that case, because we would be requiring in this file in our tests rather than running it directly.
 */
 if (module === require.main) {
   // Start listening only if we're the main module.

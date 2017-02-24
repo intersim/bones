@@ -21,18 +21,15 @@ const OAuth = db.define('oauths', {
   profileJson: Sequelize.JSON,
 }, {
   /*
-    EI:
-    Sequelize and indexes: http://docs.sequelizejs.com/en/2.0/docs/models-definition/#indexes
-    Postgres documentation: https://www.postgresql.org/docs/9.1/static/indexes.html
+    Further reading on indexes:
+    1. Sequelize and indexes: http://docs.sequelizejs.com/en/2.0/docs/models-definition/#indexes
+    2. Postgres documentation: https://www.postgresql.org/docs/9.1/static/indexes.html
   */
 	indexes: [{fields: ['uid'], unique: true,}],
 })
 
-/*
-  EI: this method is used below in the OAuth.setupStrategy method;
-  it's our callback function that will execute when the user has
-  successfully logged in
-*/
+// OAuth.V2 is in the OAuth.setupStrategy method - it's our callback function that will execute when the user has successfully logged in
+
 OAuth.V2 = (accessToken, refreshToken, profile, done) =>
   OAuth.findOrCreate({
     where: {
@@ -47,7 +44,8 @@ OAuth.V2 = (accessToken, refreshToken, profile, done) =>
       oauth.profileJson = profile
       oauth.accessToken = accessToken
       /*
-        EI: Bluebird.js method; basically like "all" but for an object whose properties might contain promises: http://bluebirdjs.com/docs/api/promise.props.html
+        db.Promise.props is a Bluebird.js method; basically like "all" but for an object whose properties might contain promises.
+        Docs: http://bluebirdjs.com/docs/api/promise.props.html
       */
       return db.Promise.props({
         oauth,
@@ -66,9 +64,7 @@ OAuth.V2 = (accessToken, refreshToken, profile, done) =>
     .then(({ user }) => done(null, user))
     .catch(done)
 
-/*
-  EI: wrapper around `passport.use` used in auth routes
-*/
+// setupStrategy is a wrapper around 'passport.use', used in auth routes
 OAuth.setupStrategy =
 ({
   provider,
@@ -88,9 +84,7 @@ OAuth.setupStrategy =
   }
 
   debug('initializing provider:%s', provider)
-  /*
-    EI: `oauth` is the callback function that will execute when the user has successfully logged in
-  */
+
   passport.use(new strategy(config, oauth))
 }
 

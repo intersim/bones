@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
 /*
-  EI: bin/setup is a symlink point to this file, which makes a symlink
-  in your project's main node_modules folder that points to the root of your project's directory.
+  'bin/setup' is a symlink point to this file, which makes a symlink in your project's main node_modules folder that points to the root of your project's directory.
 */
 
 const chalk = require('chalk')
@@ -33,13 +32,13 @@ Then run me again.
 function makeAppSymlink() {
   console.log(`Linking '${appLink}' to '..'`)
   try {
-    // EI: https://nodejs.org/api/fs.html#fs_fs_unlinksync_path
+    // fs.unlinkSync docs: https://nodejs.org/api/fs.html#fs_fs_unlinksync_path
     try { fs.unlinkSync(appLink) } catch(swallowed) { }
-    // EI: https://nodejs.org/api/fs.html#fs_fs_symlinksync_target_path_type
+    // fs.symlinkSync docs: https://nodejs.org/api/fs.html#fs_fs_symlinksync_target_path_type
     fs.symlinkSync('..', appLink, 'dir')
   } catch (error) {
     console.error(chalk.red(symlinkError(error)))
-    // EI: https://nodejs.org/api/process.html#process_process_exit_code
+    // process.exit docs: https://nodejs.org/api/process.html#process_process_exit_code
     process.exit(1)
   }
   console.log(`Ok, created ${appLink}`)
@@ -47,7 +46,7 @@ function makeAppSymlink() {
 
 function ensureAppSymlink() {
   try {
-    // EI: https://nodejs.org/api/fs.html#fs_fs_readlinksync_path_options
+    // readlinkSync docs: https://nodejs.org/api/fs.html#fs_fs_readlinksync_path_options
     const currently = fs.readlinkSync(appLink)
     if (currently !== '..') {
       throw new Error(`${appLink} is pointing to '${currently}' rather than '..'`)
