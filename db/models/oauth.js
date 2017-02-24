@@ -28,7 +28,11 @@ const OAuth = db.define('oauths', {
 	indexes: [{fields: ['uid'], unique: true,}],
 })
 
-// EI: this method is used below in the OAuth.setupStrategy method; it's our callback function that will execute when the user has successfully logged in
+/*
+  EI: this method is used below in the OAuth.setupStrategy method;
+  it's our callback function that will execute when the user has
+  successfully logged in
+*/
 OAuth.V2 = (accessToken, refreshToken, profile, done) =>
   OAuth.findOrCreate({
     where: {
@@ -42,7 +46,9 @@ OAuth.V2 = (accessToken, refreshToken, profile, done) =>
         profile.uid)
       oauth.profileJson = profile
       oauth.accessToken = accessToken
-      // EI: this is a Bluebird method, basically like "all" but for an object whose properties are all promises: http://bluebirdjs.com/docs/api/promise.props.html
+      /*
+        EI: Bluebird.js method; basically like "all" but for an object whose properties might contain promises: http://bluebirdjs.com/docs/api/promise.props.html
+      */
       return db.Promise.props({
         oauth,
         user: oauth.getUser(),
@@ -60,7 +66,9 @@ OAuth.V2 = (accessToken, refreshToken, profile, done) =>
     .then(({ user }) => done(null, user))
     .catch(done)
 
-// EI: wrapper around `passport.use`
+/*
+  EI: wrapper around `passport.use` used in auth routes
+*/
 OAuth.setupStrategy =
 ({
   provider,
@@ -80,7 +88,9 @@ OAuth.setupStrategy =
   }
 
   debug('initializing provider:%s', provider)
-  // EI: `oauth` is the callback function that will execute when the user has successfully logged in
+  /*
+    EI: `oauth` is the callback function that will execute when the user has successfully logged in
+  */
   passport.use(new strategy(config, oauth))
 }
 

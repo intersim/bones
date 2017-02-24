@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const {resolve} = require('path')
 const passport = require('passport')
 const PrettyError = require('pretty-error')
-// EI: https://www.npmjs.com/package/pretty-error
+/* EI: https://www.npmjs.com/package/pretty-error */
 
 // Bones has a symlink from node_modules/APP to the root of the app.
 // That means that we can require paths relative to the app root by
@@ -38,8 +38,8 @@ module.exports = app
   }))
   /*
     EI:
-    https://www.npmjs.com/package/cookie-session,
-    http://stackoverflow.com/questions/23566555/whats-difference-with-express-session-and-cookie-session
+    1. https://www.npmjs.com/package/cookie-session,
+    2. http://stackoverflow.com/questions/23566555/whats-difference-with-express-session-and-cookie-session
   */
 
   // Body parsing middleware
@@ -66,8 +66,7 @@ module.exports = app
   })
 
 /*
-EI: https://nodejs.org/docs/latest/api/all.html#modules_accessing_the_main_module
-Joe's comments from training: this is only starting the server if this file is being run directly by Node, and not required by another file (which is something that Bones does for testing reasons)
+  EI: Joe's comments from training: this check on line 71 is only starting the server if this file is being run directly by Node, and not required by another file (Bones does this for testing reasons; if we're running our app in development or production, we've run it directly from Node using npm start - if we're testing, then we don't actually want to start the server; module === require.main will luckily be false in that case, because we would be requiring in this file in our tests rather than running it directly)
 */
 if (module === require.main) {
   // Start listening only if we're the main module.
