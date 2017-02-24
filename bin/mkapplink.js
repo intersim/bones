@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 
-/*
-  'bin/setup' is a symlink point to this file, which makes a symlink in your project's main node_modules folder that points to the root of your project's directory.
-*/
+// 'bin/setup' is a symlink pointing to this file, which makes a
+// symlink in your project's main node_modules folder that points to
+// the root of your project's directory.
 
 const chalk = require('chalk')
 const fs = require('fs')
