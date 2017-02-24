@@ -31,10 +31,8 @@ prettyError.skipNodeFiles()
 prettyError.skipPackage('express')
 
 module.exports = app
-  /*
-    Cookie-session docs: https://www.npmjs.com/package/cookie-session
-    Compared to express-session (which is what's used in the Auther workshop), cookie-session stores sessions in a cookie, rather than some other type of session store.
-  */
+  // Session middleware - compared to express-session (which is what's used in the Auther workshop), cookie-session stores sessions in a cookie, rather than some other type of session store.
+  // Cookie-session docs: https://www.npmjs.com/package/cookie-session
   .use(require('cookie-session') ({
     name: 'session',
     keys: [process.env.SESSION_SECRET || 'an insecure secret key'],
@@ -63,11 +61,6 @@ module.exports = app
     next()
   })
 
-/*
-  This check on line 71 is only starting the server if this file is being run directly by Node, and not required by another file.
-
-  Bones does this for testing reasons. If we're running our app in development or production, we've run it directly from Node using 'npm start'; if we're testing, then we don't actually want to start the server; 'module === require.main' will luckily be false in that case, because we would be requiring in this file in our tests rather than running it directly.
-*/
 if (module === require.main) {
   // Start listening only if we're the main module.
   //
@@ -80,3 +73,7 @@ if (module === require.main) {
     }
   )
 }
+
+// This check on line 64 is only starting the server if this file is being run directly by Node, and not required by another file.
+// Bones does this for testing reasons. If we're running our app in development or production, we've run it directly from Node using 'npm start'.
+// If we're testing, then we don't actually want to start the server; 'module === require.main' will luckily be false in that case, because we would be requiring in this file in our tests rather than running it directly.

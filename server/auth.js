@@ -73,10 +73,8 @@ OAuth.setupStrategy({
 })
 
 // Other passport configuration:
-/*
-  EI: passport review in the Week 6 Concept Review:
-  https://docs.google.com/document/d/1MHS7DzzXKZvR6MkL8VWdCxohFJHGgdms71XNLIET52Q/edit?usp=sharing
-*/
+// Passport review in the Week 6 Concept Review:
+// https://docs.google.com/document/d/1MHS7DzzXKZvR6MkL8VWdCxohFJHGgdms71XNLIET52Q/edit?usp=sharing
 passport.serializeUser((user, done) => {
   done(null, user.id)
 })
@@ -96,9 +94,7 @@ passport.deserializeUser(
   }
 )
 
-/*
-  EI: require.('passport-local').Strategy => a function we can use as a constructor, that takes in a callback
-*/
+// require.('passport-local').Strategy => a function we can use as a constructor, that takes in a callback
 passport.use(new (require('passport-local').Strategy) (
   (email, password, done) => {
     debug('will authenticate user(email: "%s")', email)
